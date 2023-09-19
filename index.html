@@ -60,7 +60,7 @@
 		</div>
 	</body>
 	<script>
-var tasksRecord = JSON.parse(localStorage.getItem("tasksRecord"));
+var tasksRecord = JSON.parse(localStorage.getItem("DoropomoTasksRecord"));
 if (tasksRecord == undefined){
 	tasksRecord = []
 }
@@ -71,7 +71,7 @@ function newRecord(taskName, taskDuration){
 	if (tasksRecord.length > 128){
 		tasksRecord = tasksRecord.slice(0, 128)
 	}
-	localStorage.setItem("tasksRecord", JSON.stringify(tasksRecord));
+	localStorage.setItem("DoropomoTasksRecord", JSON.stringify(tasksRecord));
 	updateTasksList();
 }
 
