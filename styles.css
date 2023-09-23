@@ -1,0 +1,70 @@
+* {
+	font-family:sans-serif;
+	color:white;
+	background-color:black;
+}
+body{
+	margin-top:2em;
+	margin-bottom:10em;
+}
+
+input{
+	display:block;
+	margin:0.5em 0;
+	outline:none;
+	padding:0.4em 1.5em;
+	border:2px solid grey;
+}
+
+button{
+	padding:0.25em 2em;
+	border:2px solid grey;
+	color:black;
+	background-color:grey;
+	margin:1em 0;
+	display:block;
+}
+
+#deselect-button{
+	padding:0.25em 1em;
+	background-color:#222;
+	border-color:#333;
+	color:#555;
+	margin-top:4em;
+	opacity:0.25;
+}
+
+#deselect-button:hover{
+	opacity:1;
+}
+
+textarea{
+	padding:0.6em 1.5em;
+}
+
+select {
+	padding:0.5em;
+	margin:0.5em 0;
+	display:block;
+}
+
+
+input, textarea, button{
+	border-radius:0.5em;
+}
+table{
+	margin-top:4em;
+	width:48em;
+}
+table, tr, td {
+	border:1px solid grey;
+}
+td{
+	padding:0.4em 0.6em;
+}
+tr:nth-child(even) > td{
+	background-color:#2f2f2f;
+}
+td:nth-child(even){
+	width:8em;
+}

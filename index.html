@@ -2,51 +2,27 @@
 <html>
 	<head>
 		<title>Doropomo</title>
-		<style>
-		* {
-			font-family:consolas;
-			color:white;
-			background-color:black;
-		}
-		body{
-			margin:4em 0;
-		}
-		input{
-			display:block;
-		}
-		input, button {
-			width:10em;
-			height:2em;
-			border:2px solid white;
-			margin:2px 0;
-		}
-		input{
-			outline:none
-		}
-		table{
-			margin-top:4em;
-			width:48em;
-		}
-		table, tr, td {
-			border:1px solid grey;
-		}
-		td{
-			padding:0.4em 0.6em;
-		}
-		tr:nth-child(even) > td{
-			background-color:#2f2f2f;
-		}
-		</style>
+		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
-	<center>
-		<h1 id="task-name">Be Active</h1>
-		<h2 id="timer-min">0</h2>
-		<p id="timer-sec">0</p>
-		<div id="entry">
-			<input id="task" placeholder="Task name">
-			<input id="duration" type="number" min="0" max="60">
-			<button onclick="startTimer()">Tick</button>
+		<center>
+		<div id="clock-view">
+			<h1 id="task-name">Be Active</h1>
+			<h2 id="timer-min">0</h2>
+			<p id="timer-sec">0</p>
+		</div>
+		<div id="task-controller">
+			<div id="entry">
+				<select>
+					<option selected>Select</option>
+				</select>
+				<input id="task" placeholder="Task name">
+			</div>
+			<textarea placeholder="Specific description of the relevance and main steps." rows="16" cols="70"></textarea>
+		</div>
+		<button id="time-controller" onclick="configTimer()">Tick</button>
+		<button id="deselect-button" onclick="deselect()" style="display:none;">Deselect</button>
+		<div id="history-view">
 			<table>
 				<thead>
 					<tr>
@@ -58,106 +34,7 @@
 				</tbody>
 			</table>
 		</div>
+		</center>
 	</body>
-	<script>
-var tasksRecord = JSON.parse(localStorage.getItem("DoropomoTasksRecord"));
-if (tasksRecord == undefined){
-	tasksRecord = []
-}
-updateTasksList()
-
-function newRecord(taskName, taskDuration){
-	tasksRecord.push({"name":taskName, "duration":taskDuration});
-	if (tasksRecord.length > 128){
-		tasksRecord = tasksRecord.slice(0, 128)
-	}
-	localStorage.setItem("DoropomoTasksRecord", JSON.stringify(tasksRecord));
-	updateTasksList();
-}
-
-function updateTasksList(){
-	let tasksTBody = document.querySelector("table > tbody");
-	tasksTBody.innerHTML = '';
-	for (let i=tasksRecord.length-1; i>=0; i--){
-		taskName = tasksRecord[i]["name"]
-		taskDuration = tasksRecord[i]["duration"]
-		tasksTBody.innerHTML += `
-		<tr>
-			<td>
-				${taskName}
-			</td>
-			<td>
-				${taskDuration}
-			</td>
-		</tr>
-		`;
-	}
-}
-
-var timer = {
-	minutes:0,
-	seconds:0,
-	isup:false,
-	update: function (){
-		document.getElementById("timer-min").textContent = this.minutes;
-		document.getElementById("timer-sec").textContent = this.seconds;
-	},
-	tick: function (){
-		if (this.minutes > 0 || this.seconds > 0){
-			if (this.seconds > 0){
-				this.seconds--;
-			} else{
-				this.seconds = 59;
-				this.minutes--;
-			}
-			this.update();
-		}else{
-			this.isup = true;
-		}
-	},
-	set: function (m){
-		this.minutes = m;
-		this.seconds = 0;
-		this.isup = false;
-		this.update();
-	}
-}
-
-var timerPassive = {
-	minutes:0,
-	start: function (){
-		this.minutes = 0;
-		this.interval = setInterval(()=>{
-			this.minutes++;
-		}, 60000)
-	},
-	stop: function (){
-		newRecord("Passive", this.minutes);
-		clearInterval(this.interval);
-	}
-}
-
-timerPassive.start()
-
-function startTimer(){
-	let m = document.getElementById("duration").value;
-	let taskName = document.getElementById("task").value;
-	if (m == '' || taskName == ''){return;}
-	document.getElementById("task-name").textContent = taskName;
-	
-	timer.set(m);
-	document.getElementById("entry").style.display = "none";
-	timerPassive.stop()
-	let interval = setInterval(()=>{
-		timer.tick();
-		if (timer.isup){
-			document.getElementById("entry").style.display = '';
-			newRecord(taskName, m);
-			timerPassive.start();
-			document.getElementById("task-name").textContent = "Next Activity?";
-			clearInterval(interval);
-		}
-	}, 1000)
-}
-	</script>
+	<script src="main.js"></script>
 </html>
